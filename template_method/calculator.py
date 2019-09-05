@@ -66,5 +66,31 @@ class MemoryAverageCalculator(AverageCalculator):
 # fac = FileAverageCalculator(open('data.txt'))
 # print(fac.average()) # Call the template method
 
-mac = MemoryAverageCalculator([3, 1, 4, 1, 5, 9, 2, 6, 5, 3])
-print(mac.average())
+# mac = MemoryAverageCalculator([3, 1, 4, 1, 5, 9, 2, 6, 5, 3])
+# print(mac.average())
+
+
+
+"""
+ADAPTER PATTERN : To find more, look at files in /adapter/
+"""
+
+class GeneratorAdapter:
+
+    def __init__(self, adaptee):
+        self.adaptee = adaptee
+
+    def readline(self):
+        try:
+            return next(self.adaptee)
+        except StopIteration:
+            return ''
+
+    def close(self):
+        pass
+
+from random import randint
+
+g = (randint(1, 100) for i in range(1000000))
+fac = FileAverageCalculator(GeneratorAdapter(g))
+print(fac.average())

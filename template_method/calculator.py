@@ -104,6 +104,14 @@ class GeneratorAdapter:
     def close(self):
         pass
 
+"""
+The __init__ method receives the generator it will be adapting (a.k.a. the adaptee) and stores it in an instance variable.
+The readline method delegates its job to the adaptee by calling the next function.
+The readline contract establishes that when the end of the file has been reached it should return an empty string. For a generator, the equivalent of an “end of file” is when it can no longer generate more elements. The next function raises a StopIteration exception when called with an exhausted generator.
+A generator has no equivalent “closing” operation, yet we do need to provide a close method even if it does nothing because the FileAverageCalculator.dispose method calls it.
+"""
+
+
 from random import randint
 
 g = (randint(1, 100) for i in range(1000000))

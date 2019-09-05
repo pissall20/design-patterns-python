@@ -38,7 +38,6 @@ class FileAverageCalculator(AverageCalculator):
         return self.last_line != '' 
 
     def next_item(self):
-        print(self.last_line)
         result = float(self.last_line)
         self.last_line = self.file.readline() 
         return result

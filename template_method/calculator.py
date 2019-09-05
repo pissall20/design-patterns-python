@@ -1,6 +1,12 @@
 from abc import ABC, abstractmethod
 
 
+"""
+1) The average method is the template method. Observe that it calls at some point all the declared abstract methods, thus, any concrete class that inherits from AverageCalculator must implement them.
+2) The has_next abstract method has the following contract: it returns True if the current data source object is able to produce at least one more item, otherwise returns False.
+3) The next_item abstract method has the following contract: it returns the next available item from the current data source object. The result is undefined if there are no more available items.
+4) The dispose method has the following contract: it will be called in order to free any resources when all the items from the current data source object have been consumed. The default implementation does nothing and doesn’t have to be overridden (because is not decorated with @abstractmethod).
+"""
 class AverageCalculator(ABC): 
 
     def average(self): 
@@ -28,6 +34,9 @@ class AverageCalculator(ABC):
         pass
     
 
+"""
+The FileAverageCalculator class extends AverageCalculator and represents a source of sequential numerical data obtained from a text file provided during the construction of the object.
+"""
 class FileAverageCalculator(AverageCalculator):
 
     def __init__(self, file): 
@@ -45,7 +54,9 @@ class FileAverageCalculator(AverageCalculator):
     def dispose(self):
         self.file.close()
 
-
+"""
+Write a new class called MemoryAverageCalculator, which must inherit from the AverageCalculator class. This new class should be a source of sequential numerical data obtained from a list provided during the construction of the object.
+"""
 class MemoryAverageCalculator(AverageCalculator):
 
     def __init__(self, lst):
@@ -72,7 +83,11 @@ class MemoryAverageCalculator(AverageCalculator):
 
 
 """
-ADAPTER PATTERN : To find more, look at files in /adapter/
+We want to use the Average Calculator code defined previously to compute the average of a sequence of numbers produced by a generator expression. The most obvious option would be to keep using the Template Method design pattern: create a new class that extends the AverageCalculator abstract base class and then implement all its abstract methods. But let’s take a different approach in order to demonstrate how to use the Adapter pattern.
+
+We already have the FileAverageCalculator class that knows how to process sequential numerical data obtained from a text file. Note that both a text file and a generator work practically the same way: you access their elements sequentially, but with a catch. For the text file you call the readline method, yet for the generator you call the next function. So, they have the same behavior, but with a different interface. This is a job for the Adapter pattern.
+
+Reviewing the code of the FileAverageCalculator class we can see that it only uses two methods specific to a text file object: readline and close. So an adapter class would only need to provide these two methods, plus the __init__ method to do any required initialization. With this information we can now define the GeneratorAdapter class:
 """
 
 class GeneratorAdapter:
